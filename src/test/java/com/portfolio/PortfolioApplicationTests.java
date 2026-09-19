@@ -9,7 +9,16 @@ import org.testcontainers.postgresql.PostgreSQLContainer;
 
 import org.junit.jupiter.api.Test;
 
-@SpringBootTest(properties = {"MAIL_HOST=localhost", "MAIL_USER=test", "MAIL_PASSWORD=test"})
+/** Boots the full context against a throwaway pgvector Postgres; SMTP is configured but never contacted. */
+@SpringBootTest(
+    properties = {
+        "MAIL_HOST=localhost",
+        "MAIL_USER=test",
+        "MAIL_PASSWORD=test",
+        "MAIL_FROM=portfolio@example.com",
+        "CONTACT_TO=inbox@example.com",
+    }
+)
 @Testcontainers
 class PortfolioApplicationTests {
 
@@ -19,6 +28,5 @@ class PortfolioApplicationTests {
 
     @Test
     void contextLoads() {
-        
     }
 }
