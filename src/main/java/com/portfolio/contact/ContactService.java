@@ -6,12 +6,12 @@ import org.springframework.stereotype.Service;
 
 /** Forwards contact-form submissions to the portfolio inbox over SMTP. */
 @Service
-public class MailService {
+public class ContactService {
 
     private final JavaMailSender mailSender;
     private final ContactProperties contactProperties;
 
-    public MailService(JavaMailSender mailSender, ContactProperties contactProperties) {
+    public ContactService(JavaMailSender mailSender, ContactProperties contactProperties) {
         this.mailSender = mailSender;
         this.contactProperties = contactProperties;
     }

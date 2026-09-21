@@ -13,16 +13,16 @@ import jakarta.validation.Valid;
 @RequestMapping("/api/v1/contact")
 public class ContactController {
 
-    private final MailService mailService;
+    private final ContactService contactService;
 
-    public ContactController(MailService mailService) {
-        this.mailService = mailService;
+    public ContactController(ContactService contactService) {
+        this.contactService = contactService;
     }
 
     /** Sends the message and answers 204; validation failures answer 400. */
     @PostMapping
     public ResponseEntity<Void> contact(@RequestBody @Valid ContactRequestDto request) {
-        mailService.sendContactEmail(request);
+        contactService.sendContactEmail(request);
 
         return ResponseEntity.noContent().build();
     }
