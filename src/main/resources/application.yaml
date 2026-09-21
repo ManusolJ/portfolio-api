@@ -8,6 +8,10 @@ spring:
     url: ${DB_URL:jdbc:postgresql://localhost:5432/portfolio}
     username: ${DB_USER:portfolio}
     password: ${DB_PASSWORD}
+  http:
+    clients:
+      read-timeout: 5s
+      connect-timeout: 2s
   ai:
     ollama:
       base-url: ${OLLAMA_URL:http://localhost:11434}
@@ -36,6 +40,8 @@ app:
   mail:
     from: ${MAIL_FROM}
     contact-to: ${CONTACT_TO}
+  cors:
+    allowed-origin: ${CORS_ALLOWED_ORIGIN:http://localhost:4200}
 
 server:
   port: ${SERVER_PORT:8080}
