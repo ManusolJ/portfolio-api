@@ -35,3 +35,4 @@ build/
 
 !.github
 !.env.example
+!.dockerignore
