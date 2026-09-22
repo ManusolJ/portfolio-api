@@ -64,7 +64,7 @@ jobs:
         run: |
           ssh deploy.necobotultimus.org bash -s <<'REMOTE'
           set -euo pipefail
-          cd ~/poketeam-backend
+          cd ~/portfolio-api
           git fetch --quiet origin
           git reset --hard origin/main
           bash deploy.sh
