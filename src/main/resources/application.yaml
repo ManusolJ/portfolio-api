@@ -42,6 +42,12 @@ app:
     contact-to: ${CONTACT_TO}
   cors:
     allowed-origin: ${CORS_ALLOWED_ORIGIN:http://localhost:4200}
+  rate-limit:
+    amount: 1
+    capacity: 5
+    refill-interval: 1h
+  cache:
+    max-buckets: 10000
 
 server:
   shutdown: graceful
