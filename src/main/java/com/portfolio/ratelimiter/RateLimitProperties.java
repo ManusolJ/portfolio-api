@@ -9,6 +9,7 @@ import jakarta.validation.constraints.Positive;
 
 import java.time.Duration;
 
+/** Size and refill rate of each client's token bucket (`app.rate-limit.*`). */
 @Validated
 @ConfigurationProperties("app.rate-limit")
 public record RateLimitProperties(

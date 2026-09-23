@@ -5,6 +5,7 @@ import org.springframework.validation.annotation.Validated;
 
 import jakarta.validation.constraints.Positive;
 
+/** Bounds on the in-memory caches (`app.cache.*`). */
 @Validated
 @ConfigurationProperties("app.cache")
 public record CacheProperties(
