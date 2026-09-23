@@ -8,8 +8,6 @@ import com.github.benmanes.caffeine.cache.Caffeine;
 import io.github.bucket4j.Bucket;
 import io.github.bucket4j.Bandwidth;
 
-import com.portfolio.config.CacheProperties;
-
 /** Holds one token bucket per client, evicting buckets that go unused. */
 @Service
 public class RateLimiterService {
