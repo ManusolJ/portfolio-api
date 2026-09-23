@@ -45,8 +45,4 @@ public class RateLimiterService {
         Bucket bucket = resolveBucket(key);
         return bucket.tryConsume(1);
     }
-
-    public long getAvailableTokens(String key) {
-        return resolveBucket(key).getAvailableTokens();
-    }
 }
