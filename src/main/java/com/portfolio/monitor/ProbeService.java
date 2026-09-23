@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.ResourceAccessException;
 
+/** Records whether a service answers over HTTP, and how quickly. */
 @Service
 public class ProbeService {
 
