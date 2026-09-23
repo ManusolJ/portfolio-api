@@ -11,5 +11,5 @@ import jakarta.validation.constraints.NotBlank;
 public record CorsProperties(
     @NotBlank String allowedOrigin
 ) {
-    
+
 }

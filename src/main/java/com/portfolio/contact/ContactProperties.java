@@ -13,4 +13,6 @@ import jakarta.validation.constraints.NotBlank;
 public record ContactProperties(
     @Email @NotBlank String from,
     @Email @NotBlank String contactTo
-) {}
+) {
+
+}

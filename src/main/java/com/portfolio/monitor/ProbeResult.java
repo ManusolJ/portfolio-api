@@ -5,5 +5,5 @@ public record ProbeResult(
     long latencyMs,
     Integer statusCode
 ) {
-    
+
 }
