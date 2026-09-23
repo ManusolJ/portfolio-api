@@ -28,7 +28,8 @@ class RateLimitInterceptorTest {
 
     @BeforeEach
     void setUp() {
-        RateLimitProperties limits = new RateLimitProperties(AMOUNT, CAPACITY, MAX_BUCKETS, Duration.ofHours(INTERVAL_REFILL));
+        RateLimitProperties limits =
+            new RateLimitProperties(AMOUNT, CAPACITY, MAX_BUCKETS, Duration.ofHours(INTERVAL_REFILL));
 
         interceptor = new RateLimitInterceptor(new RateLimiterService(limits));
     }
