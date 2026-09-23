@@ -6,7 +6,6 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 
-import com.portfolio.ratelimiter.CacheProperties;
 import com.portfolio.ratelimiter.RateLimitProperties;
 import com.portfolio.ratelimiter.RateLimiterService;
 
@@ -29,10 +28,9 @@ class RateLimitInterceptorTest {
 
     @BeforeEach
     void setUp() {
-        CacheProperties cache = new CacheProperties(MAX_BUCKETS);
-        RateLimitProperties limits = new RateLimitProperties(AMOUNT, CAPACITY, Duration.ofHours(INTERVAL_REFILL));
+        RateLimitProperties limits = new RateLimitProperties(AMOUNT, CAPACITY, MAX_BUCKETS, Duration.ofHours(INTERVAL_REFILL));
 
-        interceptor = new RateLimitInterceptor(new RateLimiterService(limits, cache));
+        interceptor = new RateLimitInterceptor(new RateLimiterService(limits));
     }
 
     @Test
