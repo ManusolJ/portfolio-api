@@ -28,6 +28,9 @@ jobs:
           distribution: "temurin"
           cache: maven
 
+      - name: Format check
+        run: ./mvnw -B -ntp spotless:check
+
       - name: Maven verify
         run: ./mvnw -B -ntp verify
 
