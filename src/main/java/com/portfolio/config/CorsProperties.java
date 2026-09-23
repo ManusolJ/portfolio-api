@@ -1,7 +1,8 @@
 package com.portfolio.config;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.validation.annotation.Validated;
+
+import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import jakarta.validation.constraints.NotBlank;
 
