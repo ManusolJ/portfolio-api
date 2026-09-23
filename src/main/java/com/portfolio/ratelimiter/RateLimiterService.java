@@ -12,16 +12,14 @@ import io.github.bucket4j.Bandwidth;
 @Service
 public class RateLimiterService {
 
-    private final CacheProperties cacheProperties;
     private final RateLimitProperties rateLimitProperties;
 
     private final Cache<String, Bucket> buckets;
 
-    public RateLimiterService(RateLimitProperties rateLimitProperties, CacheProperties cacheProperties) {
-        this.cacheProperties = cacheProperties;
+    public RateLimiterService(RateLimitProperties rateLimitProperties) {
         this.rateLimitProperties = rateLimitProperties;
         buckets = Caffeine.newBuilder()
-            .maximumSize(this.cacheProperties.maxBuckets())
+            .maximumSize(this.rateLimitProperties.maxBuckets())
             .expireAfterAccess(this.rateLimitProperties.refillInterval().multipliedBy(2))
             .build();
     }

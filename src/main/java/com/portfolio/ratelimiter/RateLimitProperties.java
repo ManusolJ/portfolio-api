@@ -15,6 +15,7 @@ import java.time.Duration;
 public record RateLimitProperties(
     @Positive int amount,
     @Positive int capacity,
+    @Positive long maxBuckets,
     @NotNull Duration refillInterval
 ) {
 }
