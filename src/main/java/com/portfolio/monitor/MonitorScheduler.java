@@ -11,24 +11,19 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 @ConditionalOnProperty(name = "app.monitor.enabled", havingValue = "true")
 public class MonitorScheduler {
 
-    private final ProbeService probeService;
-    private final MonitorProperties monitorProperties;
+    private final MonitorService monitorService;
 
-    public MonitorScheduler(
-        ProbeService probeService,
-        MonitorProperties monitorProperties
-    ) {
-        this.probeService = probeService;
-        this.monitorProperties = monitorProperties;
+    public MonitorScheduler(MonitorService monitorService) {
+        this.monitorService = monitorService;
     }
 
     @Scheduled(fixedDelayString = "${app.monitor.interval}")
     public void probeConfiguredServices() {
-        probeService.recordProbeResult(monitorProperties.services());
+        monitorService.runChecks();
     }
 
     @Scheduled(cron = "${app.monitor.prune-cron}")
     public void pruneOldChecks() {
-        probeService.pruneOldRecords();
+        monitorService.pruneOldChecks();
     }
 }
