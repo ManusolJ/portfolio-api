@@ -42,6 +42,15 @@ app:
     contact-to: ${CONTACT_TO}
   cors:
     allowed-origin: ${CORS_ALLOWED_ORIGIN:http://localhost:4200}
+  monitor:
+    enabled: ${MONITOR_ENABLED:false}
+    interval: 60s
+    prune-cron: "0 5 * * * *"
+    services:
+      - name: portfolio-api
+        url: https://api.manusoler.dev/actuator/health
+      - name: poketeam-api
+        url: https://api.pokemon-team-builder.com/actuator/health
   rate-limit:
     amount: 1
     capacity: 5

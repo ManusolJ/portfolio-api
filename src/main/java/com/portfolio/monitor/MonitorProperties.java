@@ -5,14 +5,19 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.NotBlank;
 
+import java.time.Duration;
 import java.util.List;
 
 /** Services to probe and how often (`app.monitor.*`) */
 @Validated
 @ConfigurationProperties("app.monitor")
 public record MonitorProperties(
+    @NotNull boolean enabled,
+    @NotNull Duration interval,
+    @NotBlank String pruneCron,
     List<@Valid Service> services
 ) {
 
