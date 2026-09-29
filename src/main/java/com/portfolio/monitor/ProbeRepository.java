@@ -24,6 +24,20 @@ public class ProbeRepository {
                 latency_sum = service_day.latency_sum + EXCLUDED.latency_sum
             """;
 
+    private static final String OPEN_INCIDENT =
+        """
+            INSERT INTO incident (service, started_at, status_code)
+            VALUES (:service, now(), :statusCode)
+            ON CONFLICT (service) WHERE ended_at IS NULL DO NOTHING
+            """;
+
+    private static final String CLOSE_INCIDENT =
+        """
+            UPDATE incident
+            SET ended_at = now()
+            WHERE service = :service AND ended_at IS NULL
+            """;
+
     private static final String DELETE_OLD_CHECKS =
         """
             DELETE FROM service_check
@@ -49,6 +63,14 @@ public class ProbeRepository {
             .param("up", result.up() ? 1 : 0)
             .param("latencyMs", result.latencyMs())
             .update();
+    }
+
+    public int openIncident(String service, Integer statusCode) {
+        return db.sql(OPEN_INCIDENT).param("service", service).param("statusCode", statusCode).update();
+    }
+
+    public int closeOpenIncident(String service) {
+        return db.sql(CLOSE_INCIDENT).param("service", service).update();
     }
 
     public int pruneChecksOlderThanADay() {
