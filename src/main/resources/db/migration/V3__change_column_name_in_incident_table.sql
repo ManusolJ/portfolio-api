@@ -1,0 +1,1 @@
+ALTER TABLE incident RENAME COLUMN last_status to status_code;
