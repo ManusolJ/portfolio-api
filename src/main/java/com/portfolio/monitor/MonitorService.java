@@ -20,8 +20,7 @@ public class MonitorService {
         ProbeService probeService,
         ProbeRepository probeRepository,
         MonitorProperties monitorProperties,
-        TransactionTemplate transactionTemplate
-    ) {
+        TransactionTemplate transactionTemplate) {
         this.probeService = probeService;
         this.probeRepository = probeRepository;
         this.monitorProperties = monitorProperties;
