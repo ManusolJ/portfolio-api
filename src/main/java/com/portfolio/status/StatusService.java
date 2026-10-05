@@ -12,6 +12,7 @@ import java.time.ZoneOffset;
 import java.util.Map;
 import java.util.List;
 import java.util.HashMap;
+import java.util.Optional;
 import java.util.ArrayList;
 
 /** Composes the stored monitor data into the shape the status panel consumes. */
@@ -44,7 +45,29 @@ public class StatusService {
                 toServiceStatus(name, checks.get(name), days.getOrDefault(name, List.of()), incidents.get(name)));
         }
 
-        return new StatusDto(clock.instant(), services);
+        return new StatusDto(clock.instant(), readHost(), services);
+    }
+
+    private StatusDto.Host readHost() {
+        Optional<HostSample> latest = statusRepository.getLatestHostSample();
+
+        if (latest.isEmpty()) {
+            return null;
+        }
+
+        HostSample sample = latest.get();
+
+        return new StatusDto.Host(
+            sample.sampledAt(),
+            sample.cpuPercent(),
+            sample.memUsedBytes(),
+            sample.memTotalBytes(),
+            sample.diskUsedBytes(),
+            sample.diskTotalBytes(),
+            sample.load1m(),
+            sample.uptimeSeconds(),
+            sample.tempCelsius(),
+            statusRepository.getHostHistory());
     }
 
     private Map<String, ServiceCheck> latestCheckByService() {

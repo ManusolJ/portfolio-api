@@ -7,8 +7,24 @@ import java.util.List;
 /** Everything the status panel renders, composed from stored checks, rollups and incidents. */
 public record StatusDto(
     Instant generatedAt,
+    Host host,
     List<ServiceStatus> services
 ) {
+
+    /** Latest host vitals plus a day of five-minute averages; null when telemetry is off. */
+    public record Host(
+        Instant sampledAt,
+        double cpuPercent,
+        long memUsedBytes,
+        long memTotalBytes,
+        long diskUsedBytes,
+        long diskTotalBytes,
+        double load1m,
+        long uptimeSeconds,
+        Double tempCelsius,
+        List<HostPoint> history
+    ) {
+    }
 
     /** Current state of one monitored service plus its recent history. */
     public record ServiceStatus(
