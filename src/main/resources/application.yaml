@@ -42,6 +42,13 @@ app:
     contact-to: ${CONTACT_TO}
   cors:
     allowed-origin: ${CORS_ALLOWED_ORIGIN:http://localhost:4200}
+  telemetry:
+    enabled: ${TELEMETRY_ENABLED:false}
+    interval: 60s
+    prune-cron: "0 10 * * * *"
+    proc-path: /proc
+    disk-path: ${DISK_PATH:/host}
+    thermal-path: ${THERMAL_PATH:}
   monitor:
     enabled: ${MONITOR_ENABLED:false}
     interval: 60s
