@@ -4,9 +4,11 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
+
+import java.nio.file.Path;
 import java.nio.file.Files;
 import java.nio.file.FileStore;
-import java.nio.file.Path;
+
 import java.time.Duration;
 
 /** Reads the host's vitals from /proc, /sys and the mounted filesystem. */
@@ -46,11 +48,15 @@ public class HostMetricsReader {
     private Double tempCelsius() {
         String path = telemetryProperties.thermalPath();
 
-        if (path == null || path.isBlank() || Files.notExists(Path.of(path))) {
+        if (path == null || path.isBlank() || !Files.isRegularFile(Path.of(path))) {
             return null;
         }
 
-        return ProcParser.celsius(readFile(Path.of(path)));
+        try {
+            return ProcParser.celsius(Files.readString(Path.of(path)));
+        } catch (IOException | NumberFormatException ex) {
+            return null;
+        }
     }
 
     private long diskTotalBytes() {
