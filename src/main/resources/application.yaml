@@ -48,7 +48,8 @@ app:
     prune-cron: "0 10 * * * *"
     proc-path: /proc
     disk-path: ${DISK_PATH:/host}
-    thermal-path: ${THERMAL_PATH:}
+    device-path: /sys/class/hwmon
+    thermal-sensor: ${THERMAL_SENSOR:}
   monitor:
     enabled: ${MONITOR_ENABLED:false}
     interval: 60s

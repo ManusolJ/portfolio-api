@@ -18,6 +18,7 @@ public record TelemetryProperties(
     @NotBlank String procPath,
     @NotBlank String diskPath,
     @NotBlank String pruneCron,
-    String thermalPath
+    @NotBlank String devicePath,
+    String thermalSensor
 ) {
 }
