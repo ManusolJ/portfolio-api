@@ -71,7 +71,7 @@ public class HostMetricsReader {
         try {
             FileStore store = fileStore();
 
-            return store.getTotalSpace() - store.getUsableSpace();
+            return store.getTotalSpace() - store.getUnallocatedSpace();
         } catch (IOException ex) {
             throw new UncheckedIOException(ex);
         }
