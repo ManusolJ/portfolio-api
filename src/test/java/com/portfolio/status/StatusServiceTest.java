@@ -73,6 +73,25 @@ class StatusServiceTest {
     }
 
     @Test
+    void toleratesTheHandfulOfChecksSchedulingJitterCosts() {
+        givenDays(new ServiceDay(1432, 1432, TODAY.minusDays(1), SERVICE, 14_320L));
+
+        StatusDto.DayUptime yesterday = statusService.readStatus().services().getFirst().days().getFirst();
+
+        assertThat(yesterday.hasGap()).isFalse();
+        assertThat(yesterday.uptime()).isEqualTo(99.44);
+    }
+
+    @Test
+    void flagsADayTheMonitorWasActuallyAbsentFor() {
+        givenDays(new ServiceDay(1400, 1400, TODAY.minusDays(1), SERVICE, 14_000L));
+
+        StatusDto.DayUptime yesterday = statusService.readStatus().services().getFirst().days().getFirst();
+
+        assertThat(yesterday.hasGap()).isTrue();
+    }
+
+    @Test
     void expectsOnlyTheChecksDueSoFarToday() {
         givenDays(new ServiceDay(720, 720, TODAY, SERVICE, 7_200L));
 

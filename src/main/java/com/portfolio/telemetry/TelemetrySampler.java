@@ -24,7 +24,7 @@ public class TelemetrySampler {
         this.telemetryRepository = telemetryRepository;
     }
 
-    @Scheduled(fixedDelayString = "${app.telemetry.interval}")
+    @Scheduled(fixedRateString = "${app.telemetry.interval}")
     public void sampleHost() {
         try {
             telemetryRepository.record(hostMetricsReader.read());

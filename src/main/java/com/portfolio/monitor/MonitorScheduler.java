@@ -17,7 +17,7 @@ public class MonitorScheduler {
         this.monitorService = monitorService;
     }
 
-    @Scheduled(fixedDelayString = "${app.monitor.interval}")
+    @Scheduled(fixedRateString = "${app.monitor.interval}")
     public void probeConfiguredServices() {
         monitorService.runChecks();
     }

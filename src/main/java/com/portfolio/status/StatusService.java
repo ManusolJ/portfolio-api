@@ -19,6 +19,7 @@ import java.util.ArrayList;
 @Service
 public class StatusService {
 
+    private static final double GAP_TOLERANCE = 0.99;
     private static final int SECONDS_PER_DAY = 86_400;
 
     private final Clock clock;
@@ -135,7 +136,7 @@ public class StatusService {
             day.day(),
             percentage(day.ups(), expected),
             day.checks() == 0 ? null : Math.toIntExact(day.latencySum() / day.checks()),
-            day.checks() < expected);
+            hasGap(day.checks(), expected));
     }
 
     private StatusDto.LastIncident toLastIncident(Incident incident) {
@@ -145,6 +146,14 @@ public class StatusService {
 
         return new StatusDto.LastIncident(
             incident.startedAt(), incident.endedAt(), incident.statusCode(), incident.endedAt() == null);
+    }
+
+    /**
+     * Scheduler jitter and a restart cost a handful of checks, which is not the monitor being absent;
+     * only a shortfall past the tolerance means a day was genuinely left unobserved.
+     */
+    private boolean hasGap(long checks, long expected) {
+        return checks < expected * GAP_TOLERANCE;
     }
 
     private double uptimeOver(List<ServiceDay> days, int window, LocalDate today) {
