@@ -5,25 +5,6 @@ x-logging: &default-logging
     max-file: "3"
 
 services:
-  postgres:
-    image: pgvector/pgvector:pg17
-    container_name: homelab-db
-    restart: unless-stopped
-    environment:
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-    volumes:
-      - pgdata:/var/lib/postgresql/data
-    networks: [homelab]
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
-      start_period: 30s
-    logging: *default-logging
-
   app:
     build:
       context: .
@@ -35,9 +16,6 @@ services:
       - "127.0.0.1:8081:8080"
     extra_hosts:
       - "host.docker.internal:host-gateway"
-    depends_on:
-      postgres:
-        condition: service_healthy
     networks: [homelab]
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://localhost:8080/actuator/health"]
@@ -47,10 +25,6 @@ services:
       start_period: 40s
     logging: *default-logging
 
-volumes:
-  pgdata:
-    name: homelab-pgdata
-
 networks:
   homelab:
-    name: homelab
+    external: true
