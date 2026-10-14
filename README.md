@@ -248,7 +248,7 @@ instance, see [Deployment](#deployment).
 | `MAIL_FROM`, `CONTACT_TO`                              | Sender and destination for contact mail      |
 | `CORS_ALLOWED_ORIGIN`                                  | Origin allowed to call the API               |
 | `MONITOR_ENABLED`                                      | Turns the service probes on (off by default) |
-| `TELEMETRY_ENABLED`, `DISK_PATH`, `THERMAL_PATH`       | Host sampling; `THERMAL_PATH` is optional    |
+| `TELEMETRY_ENABLED`, `DISK_PATH`, `THERMAL_SENSOR`     | Host sampling; `THERMAL_SENSOR` is optional  |
 | `OLLAMA_URL`                                           | Embedding server, for the planned search     |
 
 ---

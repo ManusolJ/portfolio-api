@@ -28,12 +28,14 @@ public class HostMetricsReader {
     private final Path thermalSensor;
 
     public HostMetricsReader(TelemetryProperties telemetryProperties) {
+        String wanted = telemetryProperties.thermalSensor();
+
         this.telemetryProperties = telemetryProperties;
         this.thermalSensor = resolveThermalSensor();
 
-        if (telemetryProperties.thermalSensor() != null && thermalSensor == null) {
+        if (wanted != null && !wanted.isBlank() && thermalSensor == null) {
             log.warn("No device named {} under {}; temperature will be reported as null",
-                telemetryProperties.thermalSensor(), telemetryProperties.devicePath());
+                wanted, telemetryProperties.devicePath());
         }
     }
 
