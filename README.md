@@ -48,7 +48,7 @@ whether it is healthy.
 It also solves a real problem for the site. A contact form needs a server to send mail, and
 a status panel needs somewhere to keep history. Both are small; the interesting part is
 everything around them - how a home server is exposed safely, how it degrades when it is
-switched off, and how its uptime is reported honestly rather than flatteringly.
+switched off, and how its uptime is reported with honesty.
 
 ---
 
@@ -225,12 +225,17 @@ cd portfolio-api
 cp .env.example .env
 ```
 
-Fill in `.env`, then start a database and the application:
+Fill in `.env`, then start a throwaway database that matches the defaults in
+`application.yaml` (`localhost:5432/portfolio`, user `portfolio`), and the application:
 
 ```bash
-docker compose -f docker-compose.prod.yml up -d postgres
+docker run -d --name portfolio-db -p 5432:5432 -e POSTGRES_DB=portfolio \
+  -e POSTGRES_USER=portfolio -e POSTGRES_PASSWORD=portfolio pgvector/pgvector:pg17
 ./mvnw spring-boot:run
 ```
+
+In production the database is not part of this repository: it is the shared `homelab-db`
+instance, see [Deployment](#deployment).
 
 `curl localhost:8080/actuator/health` should answer `{"status":"UP"}`.
 
@@ -239,7 +244,6 @@ docker compose -f docker-compose.prod.yml up -d postgres
 | Variable                                               | Purpose                                      |
 | ------------------------------------------------------ | -------------------------------------------- |
 | `DB_URL`, `DB_USER`, `DB_PASSWORD`                     | Database connection                          |
-| `POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD`    | Read by the Postgres container on first boot |
 | `MAIL_HOST`, `MAIL_PORT`, `MAIL_USER`, `MAIL_PASSWORD` | SMTP credentials                             |
 | `MAIL_FROM`, `CONTACT_TO`                              | Sender and destination for contact mail      |
 | `CORS_ALLOWED_ORIGIN`                                  | Origin allowed to call the API               |
@@ -274,15 +278,24 @@ Docker Desktop must be running or the context test fails before any assertion do
 
 Pushing to `main` runs CI; a successful build triggers a deploy over SSH through the
 Cloudflare Tunnel, which pulls the repository on the server and runs `deploy.sh`. That
-rebuilds the image, restarts the stack and waits for the health check before declaring
-success.
+rebuilds the image, restarts the application and waits for the health check before
+declaring success.
 
 ```
 GitHub Actions ──SSH over Tunnel──> lorelei-server
                                       └── docker compose up -d --build
-                                            ├── portfolio-api   (127.0.0.1:8081)
-                                            └── homelab-db      (private network only)
+                                            └── portfolio-api   (127.0.0.1:8081)
+                                                  │  network "homelab" (external)
+                                                  ▼
+                                      homelab-db  (shared Postgres 17 + pgvector, own stack)
 ```
+
+The database is not part of this repository. `homelab-db` is a standalone stack on the
+server, shared by several projects; this app is one client of it, with its own `portfolio`
+database and a non-superuser `portfolio` role that owns it. The app joins the external
+`homelab` network and connects to `homelab-db:5432`. Because the database lives in another
+compose project, there is no `depends_on`: if it is not up yet, Flyway fails at boot and
+`restart: unless-stopped` retries.
 
 The application binds to loopback only; the tunnel is the sole ingress. The database is
 not published to the host at all.
